@@ -1,0 +1,10 @@
+{
+    "name": "standard/tutellus-halloffame",
+    "authors": [
+        {
+            "name": "programarivm",
+            "email": "info@programarivm.com"
+        }
+    ],
+    "require": {}
+}
