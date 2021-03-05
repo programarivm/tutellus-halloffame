@@ -1,6 +1,6 @@
 # Tutellus Hall of Fame
 
-A randomish hall of fame of Tutellus instructors.
+Builds a randomish hall of fame of Tutellus instructors.
 
 ---
 
@@ -9,6 +9,10 @@ A randomish hall of fame of Tutellus instructors.
 Create an `.env` file:
 
     $ cp .env.example .env
+
+Build a hall of fame as an HTML file:
+
+    $ php cli/load.php > hall.html
 
 ### Contributions
 
