@@ -32,30 +32,35 @@ class Fame
         return $replaced;
     }
 
+    private function courses(\stdClass $query)
+    {
+        $url = $_ENV['API_URL'].
+            "/courses?category_code={$query->category_code}&subcategory_code={$query->subcategory_code}&q={$query->q}&currency="
+            .self::PARAM_CURRENCY."&price_min="
+            .self::PARAM_PRICE_MIN."&price_max="
+            .self::PARAM_PRICE_MAX."&sort="
+            .self::PARAM_SORT."&limit="
+            .self::PARAM_LIMIT;
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['x-access-token: '.$_ENV['ACCESS_TOKEN']]);
+
+        $result = curl_exec ($ch);
+
+        return json_decode($result, true);
+    }
+
     public function html()
     {
         $arr = [];
         foreach ($this->query as $query) {
-            $url = $_ENV['API_URL'].
-                "/courses?category_code={$query->category_code}&subcategory_code={$query->subcategory_code}&q={$query->q}&currency="
-                .self::PARAM_CURRENCY."&price_min="
-                .self::PARAM_PRICE_MIN."&price_max="
-                .self::PARAM_PRICE_MAX."&sort="
-                .self::PARAM_SORT."&limit="
-                .self::PARAM_LIMIT;
-
-            $ch = curl_init();
-
-            curl_setopt($ch, CURLOPT_URL, $url );
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['x-access-token: '.$_ENV['ACCESS_TOKEN']]);
-
-            $result = curl_exec ($ch);
-            $decoded = json_decode($result, true);
-            if ($decoded) {
-                $arr = array_merge($arr, $decoded);
+            $result = $this->courses($query);
+            if ($result) {
+                $arr = array_merge($arr, $result);
             }
-
             sleep(1);
         }
 
